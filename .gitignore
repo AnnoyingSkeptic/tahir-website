@@ -1,0 +1,8 @@
+# Large media — store separately (cloud storage, Git LFS, etc.)
+assets/*.mp4
+assets/*.mov
+assets/*.avi
+assets/*.webm
+
+# OS
+.DS_Store

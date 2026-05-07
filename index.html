@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tahir Alaybeyi — Guitarist · Sound Engineer · Game Audio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">TA</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#portfolio">Work</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#skills" class="mobile-link">Skills</a>
+      <a href="#portfolio" class="mobile-link">Work</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <video id="heroVideo" autoplay loop muted playsinline>
+      <source src="assets/hero-video.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-content">
+      <p class="hero-eyebrow reveal">Available for sessions &amp; projects</p>
+      <h1 class="hero-name reveal">Tahir<br /><em>Alaybeyi</em></h1>
+      <div class="hero-subtitle reveal">
+        <span id="typedRole"></span><span class="cursor">|</span>
+      </div>
+      <div class="hero-ctas reveal">
+        <a href="#portfolio" class="btn btn-primary">Hear My Work</a>
+        <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+      </div>
+    </div>
+    <div class="volume-control" id="volumeControl">
+      <div class="volume-popup" id="volumePopup">
+        <span class="volume-label" id="volumeLabel">50%</span>
+        <input type="range" id="volumeSlider" class="volume-slider"
+               min="0" max="100" value="50" orient="vertical" aria-label="Volume" />
+      </div>
+      <button id="muteBtn" class="mute-btn" aria-label="Unmute video">
+        <!-- muted icon -->
+        <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <line x1="23" y1="9" x2="17" y2="15"/>
+          <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+        <!-- unmuted icon -->
+        <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+      </button>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image reveal">
+          <div class="avatar-placeholder">TA</div>
+          <div class="about-image-glow"></div>
+        </div>
+        <div class="about-text">
+          <span class="section-label reveal">About</span>
+          <h2 class="reveal">Crafting sound<br /><em>that moves people.</em></h2>
+          <p class="reveal">
+            I'm a multi-disciplinary audio professional based in [Your City]. From intimate studio sessions to immersive game worlds, I bring music and sound to life — whether that's laying down a soulful guitar track, sculpting an otherworldly soundscape, or delivering a polished final mix ready for release.
+          </p>
+          <p class="reveal">
+            With experience spanning live performance, session recording, post-production, and interactive audio, I work with artists, studios, and developers to make every listening moment count.
+          </p>
+          <div class="about-stats reveal">
+            <div class="stat"><span class="stat-num">8+</span><span class="stat-label">Years Experience</span></div>
+            <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Projects Delivered</span></div>
+            <div class="stat"><span class="stat-num">6</span><span class="stat-label">Disciplines</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SKILLS ── -->
+  <section id="skills">
+    <div class="container">
+      <span class="section-label reveal">What I Do</span>
+      <h2 class="reveal">Skills &amp; Services</h2>
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <div class="skill-icon">🎸</div>
+          <h3>Guitarist</h3>
+          <p>Electric, acoustic, classical, and fingerstyle. From blues-drenched leads to clean atmospheric textures.</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon">🎼</div>
+          <h3>Session Musician</h3>
+          <p>Remote and in-studio recording sessions. Reliable, expressive, and quick to adapt to your artistic vision.</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon">🎚️</div>
+          <h3>Sound Engineer</h3>
+          <p>Live and studio engineering — mic placement, signal flow, tracking, and monitoring for optimal capture.</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon">🎛️</div>
+          <h3>Mix &amp; Master</h3>
+          <p>Balanced, translatable mixes with loudness-standard mastering for streaming, vinyl, and broadcast.</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon">🎮</div>
+          <h3>Game Audio</h3>
+          <p>Interactive audio implementation, adaptive music systems, and middleware integration (Wwise, FMOD).</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon">🔊</div>
+          <h3>Sound Design</h3>
+          <p>Original sound effects, atmospheres, and Foley for film, games, trailers, and branded content.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PORTFOLIO ── -->
+  <section id="portfolio">
+    <div class="container">
+      <span class="section-label reveal">Selected Work</span>
+      <h2 class="reveal">Portfolio</h2>
+      <div class="portfolio-grid">
+
+        <!-- Project 1 — YouTube embed -->
+        <div class="project-card reveal">
+          <div class="project-embed">
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="Guitar Session Demo"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Guitarist</span>
+            <h3>Session Demo — Studio Playthrough</h3>
+            <p>Live session recording showcasing a range of guitar tones, from clean arpeggios to driven leads.</p>
+          </div>
+        </div>
+
+        <!-- Project 2 — SoundCloud embed -->
+        <div class="project-card reveal">
+          <div class="project-embed sc-embed">
+            <iframe
+              width="100%"
+              height="166"
+              scrolling="no"
+              frameborder="no"
+              allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/tahir-alaybeyi&color=%2300d4ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
+            </iframe>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Mix &amp; Master</span>
+            <h3>Commercial Mix — Full Production</h3>
+            <p>End-to-end mix and master for an indie artist release. Targeting streaming platforms at −14 LUFS.</p>
+          </div>
+        </div>
+
+        <!-- Project 3 — YouTube embed -->
+        <div class="project-card reveal">
+          <div class="project-embed">
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="Game Audio Demo"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Game Audio</span>
+            <h3>Adaptive Soundtrack — Indie Game</h3>
+            <p>Adaptive music system built in Wwise for a 2D action-platformer. Horizontal re-sequencing reacts to gameplay state.</p>
+          </div>
+        </div>
+
+        <!-- Project 4 — SoundCloud embed -->
+        <div class="project-card reveal">
+          <div class="project-embed sc-embed">
+            <iframe
+              width="100%"
+              height="166"
+              scrolling="no"
+              frameborder="no"
+              allow="autoplay"
+              src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/tahir-alaybeyi&color=%2300d4ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
+            </iframe>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Sound Design</span>
+            <h3>SFX Pack — Sci-Fi Ambiences</h3>
+            <p>Layered sound design for a sci-fi environment: drones, mechanical textures, and reactive UI sounds.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SOCIAL ── -->
+  <section id="social">
+    <div class="container">
+      <span class="section-label reveal">Find Me On</span>
+      <div class="social-row reveal">
+        <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <span>Instagram</span>
+        </a>
+        <a href="https://youtube.com/@YOUR_CHANNEL" target="_blank" rel="noopener" class="social-link" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+          <span>YouTube</span>
+        </a>
+        <a href="https://soundcloud.com/YOUR_PROFILE" target="_blank" rel="noopener" class="social-link" aria-label="SoundCloud">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 13.5a4.5 4.5 0 0 0 4.5 4.5H17a4 4 0 0 0 0-8 4 4 0 0 0-.5.03A6 6 0 0 0 5 7a6 6 0 0 0-4 11"/></svg>
+          <span>SoundCloud</span>
+        </a>
+        <a href="https://open.spotify.com/artist/YOUR_ID" target="_blank" rel="noopener" class="social-link" aria-label="Spotify">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 13.5c2.5-1 5.5-1 8 0M7 10.5c3-1.2 6.5-1.2 9.5 0M9 16.5c2-0.8 4-0.8 6 0"/></svg>
+          <span>Spotify</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner reveal">
+        <span class="section-label">Contact</span>
+        <h2>Let's make<br /><em>something great.</em></h2>
+        <p>Available for session work, mixing &amp; mastering, game audio, and sound design projects. Get in touch and let's talk.</p>
+        <a href="mailto:mtahiralaybeyi@gmail.com" class="btn btn-primary btn-large">Send an Email</a>
+        <div class="contact-social">
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://youtube.com/@YOUR_CHANNEL" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://soundcloud.com/YOUR_PROFILE" target="_blank" rel="noopener" aria-label="SoundCloud">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 13.5a4.5 4.5 0 0 0 4.5 4.5H17a4 4 0 0 0 0-8 4 4 0 0 0-.5.03A6 6 0 0 0 5 7a6 6 0 0 0-4 11"/></svg>
+          </a>
+          <a href="https://open.spotify.com/artist/YOUR_ID" target="_blank" rel="noopener" aria-label="Spotify">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 13.5c2.5-1 5.5-1 8 0M7 10.5c3-1.2 6.5-1.2 9.5 0M9 16.5c2-0.8 4-0.8 6 0"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Tahir Alaybeyi. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
