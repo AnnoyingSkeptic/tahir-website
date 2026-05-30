@@ -123,10 +123,14 @@ p { color: var(--text-muted); line-height: 1.75; }
   left: 0;
   right: 0;
   z-index: 100;
-  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#navbar.nav-hidden {
+  transform: translateY(-100%);
 }
 #navbar.scrolled {
   background: rgba(8,10,14,0.85);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 }
@@ -317,6 +321,7 @@ p { color: var(--text-muted); line-height: 1.75; }
   align-items: center;
   gap: 0.5rem;
   background: rgba(8,10,14,0.75);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 24px;
@@ -328,7 +333,8 @@ p { color: var(--text-muted); line-height: 1.75; }
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 .volume-control:hover .volume-popup,
-.volume-control:focus-within .volume-popup {
+.volume-control:focus-within .volume-popup,
+.volume-control.popup-open .volume-popup {
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
@@ -389,6 +395,7 @@ p { color: var(--text-muted); line-height: 1.75; }
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.25);
   background: rgba(8,10,14,0.55);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   color: var(--text);
   cursor: pointer;
@@ -681,6 +688,10 @@ footer p {
   .nav-links { display: none; }
   .hamburger { display: flex; }
 
+  #about, #skills, #portfolio { padding: 4.5rem 0; }
+  #social { padding: 3.5rem 0; }
+  #contact { padding: 5rem 0; }
+
   .about-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
@@ -698,7 +709,19 @@ footer p {
 }
 
 @media (max-width: 480px) {
-  .hero-content { padding: 7rem 1.5rem 2rem; max-width: 100%; }
-  .hero-ctas { flex-direction: column; align-items: flex-end; }
+  #hero { justify-content: center; }
+  .hero-content {
+    padding: 7rem 1.5rem 2rem;
+    max-width: 100%;
+    text-align: center;
+  }
+  .hero-eyebrow { justify-content: center; }
+  .hero-eyebrow::after { display: none; }
+  .hero-ctas {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-ctas .btn { width: 100%; max-width: 280px; justify-content: center; }
   .about-stats { flex-wrap: wrap; gap: 1.5rem; }
 }

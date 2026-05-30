@@ -13,6 +13,9 @@ function syncMuteIcon() {
   muteBtn.setAttribute('aria-label', muted ? 'Unmute video' : 'Mute video');
 }
 
+const volumeControl = document.getElementById('volumeControl');
+const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
+
 muteBtn.addEventListener('click', () => {
   heroVid.muted = !heroVid.muted;
   /* restore slider volume if it was dragged to 0 */
@@ -22,7 +25,19 @@ muteBtn.addEventListener('click', () => {
     volumeLabel.textContent = '50%';
   }
   syncMuteIcon();
+
+  /* on touch devices: toggle the popup instead of relying on hover */
+  if (isTouchDevice()) {
+    volumeControl.classList.toggle('popup-open');
+  }
 });
+
+/* close popup when tapping outside on touch devices */
+document.addEventListener('touchstart', (e) => {
+  if (isTouchDevice() && !volumeControl.contains(e.target)) {
+    volumeControl.classList.remove('popup-open');
+  }
+}, { passive: true });
 
 volumeSlider.addEventListener('input', () => {
   const val = parseInt(volumeSlider.value, 10);
@@ -35,8 +50,24 @@ volumeSlider.addEventListener('input', () => {
 
 /* ── NAVBAR SCROLL ── */
 const navbar = document.getElementById('navbar');
+let lastScrollY = 0;
+
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
+  const y = window.scrollY;
+  navbar.classList.toggle('scrolled', y > 40);
+
+  if (y < 80) {
+    navbar.classList.remove('nav-hidden');
+  } else if (y > lastScrollY + 8) {
+    navbar.classList.add('nav-hidden');
+    /* also close mobile menu if open */
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+  } else if (y < lastScrollY - 8) {
+    navbar.classList.remove('nav-hidden');
+  }
+
+  lastScrollY = y;
 }, { passive: true });
 
 /* ── MOBILE NAV ── */
@@ -118,8 +149,8 @@ const ctx = canvas.getContext('2d');
 const heroVideo = document.getElementById('heroVideo');
 
 let W, H, particles;
-const PARTICLE_COUNT = 80;
 const CONNECT_DIST = 160;
+const particleCount = () => window.innerWidth < 768 ? 35 : 80;
 
 function resize() {
   W = canvas.width = canvas.offsetWidth;
@@ -127,7 +158,7 @@ function resize() {
 }
 
 function initParticles() {
-  particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+  particles = Array.from({ length: particleCount() }, () => ({
     x: Math.random() * W,
     y: Math.random() * H,
     vx: (Math.random() - 0.5) * 0.4,

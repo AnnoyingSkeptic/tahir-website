@@ -3,6 +3,14 @@ assets/*.mp4
 assets/*.mov
 assets/*.avi
 assets/*.webm
+assets/*.mp3
+assets/*.wav
+assets/*.aiff
+assets/*.flac
+assets/*.ogg
+
+# Allow the compressed hero video
+!assets/hero-video.mp4
 
 # OS
 .DS_Store
