@@ -43,6 +43,8 @@ body::before {
   max-width: 1140px;
   margin: 0 auto;
   padding: 0 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -514,6 +516,18 @@ p { color: var(--text-muted); line-height: 1.75; }
 #about {
   padding: 8rem 0;
   background: var(--bg2);
+  position: relative;
+  overflow: hidden;
+}
+#about::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 12% at 15% 35%, rgba(0,212,255,0.13) 0%, transparent 100%),
+    radial-gradient(ellipse 45% 8%  at 80% 75%, rgba(167,139,250,0.10) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 .about-grid {
   display: grid;
@@ -565,6 +579,18 @@ p { color: var(--text-muted); line-height: 1.75; }
 #skills {
   padding: 8rem 0;
   background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+#skills::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 10% at 85% 25%, rgba(0,212,255,0.11) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 9%  at 20% 70%, rgba(167,139,250,0.09) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 #skills h2 { margin-bottom: 3rem; }
 .skills-grid {
@@ -617,6 +643,18 @@ p { color: var(--text-muted); line-height: 1.75; }
 #portfolio {
   padding: 8rem 0;
   background: var(--bg2);
+  position: relative;
+  overflow: hidden;
+}
+#portfolio::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 8% at 50% 15%, rgba(0,212,255,0.09) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 9% at 10% 80%, rgba(167,139,250,0.08) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 #portfolio h2 { margin-bottom: 3rem; }
 .portfolio-grid {
@@ -742,6 +780,17 @@ p { color: var(--text-muted); line-height: 1.75; }
 #contact {
   padding: 8rem 0;
   background: var(--bg2);
+  position: relative;
+  overflow: hidden;
+}
+#contact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 65% 11% at 70% 40%, rgba(0,212,255,0.10) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 .contact-inner {
   text-align: center;
