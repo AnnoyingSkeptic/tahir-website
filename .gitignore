@@ -14,3 +14,9 @@ assets/*.ogg
 
 # OS
 .DS_Store
+
+# Editor / tooling
+.vscode/
+.claude/
+*.swp
+*.swo
