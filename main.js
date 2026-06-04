@@ -36,6 +36,7 @@ muteBtn.addEventListener('click', () => {
 document.addEventListener('touchstart', (e) => {
   if (isTouchDevice() && !volumeControl.contains(e.target)) {
     volumeControl.classList.remove('popup-open');
+    volumeControl.querySelector(':focus')?.blur();
   }
 }, { passive: true });
 

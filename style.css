@@ -350,8 +350,6 @@ p { color: var(--text-muted); line-height: 1.75; }
 
 /* vertical range slider */
 .volume-slider {
-  -webkit-appearance: slider-vertical;
-  appearance: slider-vertical;
   writing-mode: vertical-lr;
   direction: rtl;
   width: 4px;
