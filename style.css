@@ -51,7 +51,7 @@ img { max-width: 100%; display: block; }
 /* ── TYPOGRAPHY ── */
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; }
 h1 { font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 700; }
-h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; }
+h2 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; }
 h3 { font-size: 1.15rem; font-weight: 600; font-family: var(--font-body); }
 em { font-style: italic; color: var(--accent); }
 
@@ -442,7 +442,7 @@ p { color: var(--text-muted); line-height: 1.75; }
 
 /* ── ABOUT ── */
 #about {
-  padding: 7rem 0;
+  padding: 8rem 0;
   background: var(--bg2);
 }
 .about-grid {
@@ -493,7 +493,7 @@ p { color: var(--text-muted); line-height: 1.75; }
 
 /* ── SKILLS ── */
 #skills {
-  padding: 7rem 0;
+  padding: 8rem 0;
   background: var(--bg);
 }
 #skills h2 { margin-bottom: 3rem; }
@@ -525,7 +525,7 @@ p { color: var(--text-muted); line-height: 1.75; }
 
 /* ── PORTFOLIO ── */
 #portfolio {
-  padding: 7rem 0;
+  padding: 8rem 0;
   background: var(--bg2);
 }
 #portfolio h2 { margin-bottom: 3rem; }
