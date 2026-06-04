@@ -537,10 +537,23 @@ p { color: var(--text-muted); line-height: 1.75; }
 .skills-grid .skill-card:nth-child(5) { border-left-color: #f472b6; --skill-glow: rgba(244,114,182,0.35); }
 .skills-grid .skill-card:nth-child(6) { border-left-color: #6366f1; --skill-glow: rgba(99,102,241,0.35); }
 .skill-icon {
-  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
   margin-bottom: 1rem;
   display: block;
 }
+.skill-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* Icon color matches each card's accent */
+.skills-grid .skill-card:nth-child(1) .skill-icon { color: #00d4ff; }
+.skills-grid .skill-card:nth-child(2) .skill-icon { color: #00c9a7; }
+.skills-grid .skill-card:nth-child(3) .skill-icon { color: #ff6b6b; }
+.skills-grid .skill-card:nth-child(4) .skill-icon { color: #a78bfa; }
+.skills-grid .skill-card:nth-child(5) .skill-icon { color: #f472b6; }
+.skills-grid .skill-card:nth-child(6) .skill-icon { color: #6366f1; }
 .skill-card h3 { margin-bottom: 0.6rem; color: var(--text); }
 .skill-card p { font-size: 0.875rem; margin: 0; }
 
