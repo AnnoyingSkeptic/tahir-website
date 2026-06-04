@@ -216,6 +216,7 @@ p { color: var(--text-muted); line-height: 1.75; }
 #hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh; /* iOS Safari: excludes browser chrome */
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -753,11 +754,20 @@ footer p {
     max-width: 100%;
     text-align: center;
   }
+  /* Eyebrow: switch from right-aligned flex to centered */
+  .hero-eyebrow {
+    justify-content: center;
+  }
+  .hero-eyebrow::after {
+    display: none; /* decorative line doesn't work centered */
+  }
   .hero-ctas {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
   }
   .hero-ctas .btn { width: 100%; max-width: 280px; justify-content: center; }
-  .about-stats { flex-wrap: wrap; gap: 1.5rem; }
+  /* Stats: distribute evenly so 3 items stay in one row */
+  .about-stats { flex-wrap: wrap; gap: 1rem; }
+  .about-stats .stat { flex: 1 1 0; min-width: 0; }
 }

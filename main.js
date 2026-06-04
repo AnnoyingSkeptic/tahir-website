@@ -169,13 +169,17 @@ function initParticles() {
   }));
 }
 
+let animRunning = true;
+let animFrameId = null;
+
 function drawFrame() {
+  if (!animRunning) return;
+  animFrameId = requestAnimationFrame(drawFrame);
   ctx.clearRect(0, 0, W, H);
 
   const videoPlaying = heroVideo && heroVideo.readyState >= 3 && !heroVideo.paused;
 
   if (!videoPlaying) {
-    /* fallback gradient background when no video */
     const bg = ctx.createRadialGradient(W * 0.3, H * 0.4, 0, W * 0.5, H * 0.5, W * 0.85);
     bg.addColorStop(0, 'rgba(0,40,60,0.9)');
     bg.addColorStop(0.5, 'rgba(5,10,18,0.95)');
@@ -184,7 +188,6 @@ function drawFrame() {
     ctx.fillRect(0, 0, W, H);
   }
 
-  /* particles & connections */
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
     p.x += p.vx;
@@ -211,9 +214,21 @@ function drawFrame() {
       }
     }
   }
-
-  requestAnimationFrame(drawFrame);
 }
+
+/* pause animation when hero is not visible — saves battery on mobile */
+const heroSection = document.getElementById('hero');
+const heroVisibilityObserver = new IntersectionObserver((entries) => {
+  const visible = entries[0].isIntersecting;
+  if (visible && !animRunning) {
+    animRunning = true;
+    drawFrame();
+  } else if (!visible && animRunning) {
+    animRunning = false;
+    cancelAnimationFrame(animFrameId);
+  }
+}, { threshold: 0.01 });
+heroVisibilityObserver.observe(heroSection);
 
 window.addEventListener('resize', () => { resize(); initParticles(); }, { passive: true });
 resize();
