@@ -262,7 +262,16 @@ p { color: var(--text-muted); line-height: 1.75; }
 }
 .hero-name {
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #ffffff 0%, #a0b4cc 100%);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+.hero-name-first {
+  color: #ffffff;
+  display: block;
+}
+.hero-name-gradient {
+  display: block;
+  background: linear-gradient(90deg, #00d4ff 0%, #7b5ea7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
