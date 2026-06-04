@@ -52,7 +52,18 @@ No exceptions. Do all three:
 
 If the user ends the session without triggering this, do it anyway in the last response.
 
+## Key conventions (updated 2026-06-04)
+
+- Skill icons: inline Feather SVGs (`stroke="currentColor"`), each colored via `.skill-icon { color: <card-accent>; }` per nth-child.
+- Hero video: plays once, freezes on last frame. Stop button (bottom-left, `.stop-btn`) visible while playing — shrinks/fades on stop. Replay button (same slot) pops in when ended. Hero collapses to `55vh` on end via `#hero.video-ended`.
+- Canvas particle mesh: boosts particle size (1.8×), opacity, and gradient vividness when `videoEnded = true`.
+- Nav: TA logo removed, `justify-content: flex-end` on `.nav-inner`.
+- Brush stroke accents: `::before` pseudo-elements on `#about`, `#skills`, `#portfolio`, `#contact` — narrow radial-gradient ellipses (cyan/purple, 8–13% opacity). `.container` has `position: relative; z-index: 1` to stay above them.
+- `docs/` folder is gitignored (superpowers plugin scaffold).
+
 ## Open items
 
+- Video logo removal — Calvin Klein logo in hero video. DaVinci Resolve downloaded (2026-06-04). Use motion-tracked mask/rotoscope. Static mask rejected (blocks guitar view).
 - Avatar photo — replace with cleaner shot (simpler background, just Tahir + guitar). Drop on Desktop and swap `assets/avatar.jpg`.
 - Exaltation portfolio card description — still placeholder copy. Ask Tahir for one line on the sound/mood.
+- Spotify artist page — add links to social + contact sections once page is live.
