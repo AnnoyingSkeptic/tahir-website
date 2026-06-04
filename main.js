@@ -132,11 +132,12 @@ type();
 const revealEls = document.querySelectorAll('.reveal');
 
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      const siblings = [...entry.target.parentElement.querySelectorAll('.reveal:not(.visible)')];
-      const delay = siblings.indexOf(entry.target) * 80;
-      setTimeout(() => entry.target.classList.add('visible'), delay);
+      const allSiblings = [...entry.target.parentElement.children];
+      const idx = allSiblings.indexOf(entry.target);
+      entry.target.style.transitionDelay = (idx * 80) + 'ms';
+      entry.target.classList.add('visible');
       observer.unobserve(entry.target);
     }
   });
