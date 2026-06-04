@@ -39,6 +39,16 @@ Three files, no frameworks:
 - Scroll-reveal: add class `reveal` to any element; JS adds `visible` when it enters the viewport.
 - Embedded media: YouTube uses a 16:9 padding-bottom iframe wrapper (`.project-embed`); SoundCloud uses `.project-embed.sc-embed` which overrides to a fixed 166px height.
 
+## End of every session — mandatory before closing
+
+No exceptions. Do all three:
+
+1. **Kanban** — move every completed item to Done, add any new Backlog items discovered. File: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Mind Palace/10 Projects/Tahir Website/Kanban.md`
+2. **CLAUDE.md** — update conventions, open items, and any gotchas learned this session.
+3. **Git** — commit and push if any site files changed.
+
+If the user ends the session without triggering this, do it anyway in the last response.
+
 ## Open items
 
 - Avatar photo — replace with cleaner shot (simpler background, just Tahir + guitar). Drop on Desktop and swap `assets/avatar.jpg`.
