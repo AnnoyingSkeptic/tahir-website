@@ -141,14 +141,7 @@ p { color: var(--text-muted); line-height: 1.75; }
   padding: 1.2rem 2rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-.nav-logo {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.05em;
+  justify-content: flex-end;
 }
 .nav-links {
   display: flex;
@@ -221,6 +214,13 @@ p { color: var(--text-muted); line-height: 1.75; }
   align-items: flex-start;
   justify-content: flex-end;
   overflow: hidden;
+  transition: min-height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#hero.video-ended {
+  min-height: 55vh;
+}
+#hero.video-ended .hero-scroll-hint {
+  opacity: 0;
 }
 #hero video {
   position: absolute;
@@ -229,7 +229,9 @@ p { color: var(--text-muted); line-height: 1.75; }
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  transition: opacity 1.5s ease;
 }
+#hero video.ended { opacity: 0; }
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -429,6 +431,60 @@ p { color: var(--text-muted); line-height: 1.75; }
 .mute-btn .icon-unmuted { display: none; }
 .mute-btn.unmuted .icon-muted   { display: none; }
 .mute-btn.unmuted .icon-unmuted { display: block; }
+.replay-btn,
+.stop-btn {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(8,10,14,0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease, transform 0.4s ease, border-color var(--transition), color var(--transition), box-shadow var(--transition);
+}
+.replay-btn:hover,
+.stop-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 16px rgba(0,212,255,0.25);
+}
+.replay-btn svg,
+.stop-btn svg {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+/* stop: visible while playing, minimizes when done */
+.stop-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+.stop-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+}
+/* replay: hidden while playing, pops in when done */
+.replay-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+}
+.replay-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
 .hero-scroll-hint {
   position: absolute;
   bottom: 2.5rem;

@@ -3,6 +3,33 @@ const muteBtn      = document.getElementById('muteBtn');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeLabel  = document.getElementById('volumeLabel');
 const heroVid      = document.getElementById('heroVideo');
+const replayBtn    = document.getElementById('replayBtn');
+const stopBtn      = document.getElementById('stopBtn');
+
+/* ── VIDEO ENDED / STOPPED ── */
+let videoEnded = false;
+
+function onVideoStop() {
+  videoEnded = true;
+  heroVid.classList.add('ended');
+  heroSection.classList.add('video-ended');
+  stopBtn.classList.add('hidden');
+  replayBtn.classList.add('visible');
+}
+
+function onVideoReplay() {
+  videoEnded = false;
+  heroVid.classList.remove('ended');
+  heroSection.classList.remove('video-ended');
+  replayBtn.classList.remove('visible');
+  stopBtn.classList.remove('hidden');
+  heroVid.currentTime = 0;
+  heroVid.play();
+}
+
+heroVid.addEventListener('ended', onVideoStop);
+stopBtn.addEventListener('click', () => { heroVid.pause(); onVideoStop(); });
+replayBtn.addEventListener('click', onVideoReplay);
 
 /* start at 50% volume, muted (autoplay requirement) */
 heroVid.volume = 0.5;
@@ -180,13 +207,33 @@ function drawFrame() {
   const videoPlaying = heroVideo && heroVideo.readyState >= 3 && !heroVideo.paused;
 
   if (!videoPlaying) {
-    const bg = ctx.createRadialGradient(W * 0.3, H * 0.4, 0, W * 0.5, H * 0.5, W * 0.85);
-    bg.addColorStop(0, 'rgba(0,40,60,0.9)');
-    bg.addColorStop(0.5, 'rgba(5,10,18,0.95)');
-    bg.addColorStop(1, 'rgba(8,10,14,1)');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
+    if (videoEnded) {
+      /* richer background when video is done — two overlapping glows */
+      const bg = ctx.createRadialGradient(W * 0.25, H * 0.45, 0, W * 0.4, H * 0.5, W * 0.75);
+      bg.addColorStop(0,   'rgba(0,90,130,0.95)');
+      bg.addColorStop(0.4, 'rgba(8,20,40,0.97)');
+      bg.addColorStop(1,   'rgba(8,10,14,1)');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      const bg2 = ctx.createRadialGradient(W * 0.75, H * 0.3, 0, W * 0.7, H * 0.4, W * 0.5);
+      bg2.addColorStop(0,   'rgba(80,40,140,0.25)');
+      bg2.addColorStop(1,   'rgba(8,10,14,0)');
+      ctx.fillStyle = bg2;
+      ctx.fillRect(0, 0, W, H);
+    } else {
+      const bg = ctx.createRadialGradient(W * 0.3, H * 0.4, 0, W * 0.5, H * 0.5, W * 0.85);
+      bg.addColorStop(0, 'rgba(0,40,60,0.9)');
+      bg.addColorStop(0.5, 'rgba(5,10,18,0.95)');
+      bg.addColorStop(1, 'rgba(8,10,14,1)');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+    }
   }
+
+  const dotOpacity  = videoEnded ? 0.85 : 0.55;
+  const lineOpacity = videoEnded ? 0.22 : 0.12;
+  const radiusScale = videoEnded ? 1.8  : 1.0;
 
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
@@ -196,8 +243,8 @@ function drawFrame() {
     if (p.y < 0 || p.y > H) p.vy *= -1;
 
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,212,255,0.55)';
+    ctx.arc(p.x, p.y, p.r * radiusScale, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,212,255,${dotOpacity})`;
     ctx.fill();
 
     for (let j = i + 1; j < particles.length; j++) {
@@ -208,8 +255,8 @@ function drawFrame() {
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(q.x, q.y);
-        ctx.strokeStyle = `rgba(0,212,255,${0.12 * (1 - dist / CONNECT_DIST)})`;
-        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = `rgba(0,212,255,${lineOpacity * (1 - dist / CONNECT_DIST)})`;
+        ctx.lineWidth = videoEnded ? 0.9 : 0.6;
         ctx.stroke();
       }
     }
