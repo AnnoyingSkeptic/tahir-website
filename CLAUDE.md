@@ -38,6 +38,9 @@ Three files, no frameworks:
 - `background-clip: text` on gradient spans: always add `padding-bottom: 0.12em` — tight `line-height` clips descenders otherwise.
 - Scroll-reveal: add class `reveal` to any element; JS adds `visible` when it enters the viewport.
 - Embedded media: YouTube uses a 16:9 padding-bottom iframe wrapper (`.project-embed`); SoundCloud uses `.project-embed.sc-embed` which overrides to a fixed 166px height.
+- Hero height: `min-height: 100vh; min-height: 100svh` — the `100svh` line overrides on iOS Safari to exclude browser chrome.
+- Canvas animation: pauses via `IntersectionObserver` when `#hero` is out of view — do not replace with a plain `requestAnimationFrame` loop.
+- Video logo removal (hero-video-original.mp4): ffmpeg static-mask approach was tried and rejected — it blocks guitar visibility. Use DaVinci Resolve or RunwayML with motion tracking instead.
 
 ## End of every session — mandatory before closing
 
