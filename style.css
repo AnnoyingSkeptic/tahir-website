@@ -537,6 +537,26 @@ p { color: var(--text-muted); line-height: 1.75; }
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
+.portfolio-grid .project-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: 560px;
+  margin-inline: auto;
+  width: 100%;
+}
+.portfolio-more {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+.portfolio-more a {
+  color: var(--accent);
+  font-size: 0.95rem;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: var(--transition);
+}
+.portfolio-more a:hover { opacity: 1; }
 .project-card {
   background: var(--surface);
   border: 1px solid var(--border);
