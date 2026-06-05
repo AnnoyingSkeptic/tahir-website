@@ -15,8 +15,6 @@ function onVideoStop() {
   heroSection.classList.add('video-ended');
   stopBtn.classList.add('hidden');
   replayBtn.classList.add('visible');
-  canvas.classList.add('expanded');
-  resize(); initParticles();
 }
 
 function onVideoReplay() {
@@ -25,8 +23,6 @@ function onVideoReplay() {
   heroSection.classList.remove('video-ended');
   replayBtn.classList.remove('visible');
   stopBtn.classList.remove('hidden');
-  canvas.classList.remove('expanded');
-  resize(); initParticles();
   heroVid.currentTime = 0;
   heroVid.play();
 }
@@ -176,63 +172,154 @@ const observer = new IntersectionObserver((entries) => {
 
 revealEls.forEach(el => observer.observe(el));
 
-/* ── HERO CANVAS (particle mesh) ── */
+/* ── HERO CANVAS (particle mesh / star sparkle) ── */
 const canvas = document.getElementById('heroCanvas');
 const ctx = canvas.getContext('2d');
 const heroVideo = document.getElementById('heroVideo');
 
 let W, H, particles;
-const CONNECT_DIST = 160;
-const particleCount = () => window.innerWidth < 768 ? 40 : 110;
+const CONNECT_DIST = 180;
+const particleCount = () => window.innerWidth < 768 ? 65 : 200;
 
 function resize() {
-  W = canvas.width = canvas.offsetWidth;
-  H = canvas.height = canvas.offsetHeight;
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
 }
 
 function initParticles() {
-  particles = Array.from({ length: particleCount() }, () => ({
-    x: Math.random() * W,
-    y: Math.random() * H,
-    vx: (Math.random() - 0.5) * 0.4,
-    vy: (Math.random() - 0.5) * 0.4,
-    r: Math.random() * 1.5 + 0.5,
-  }));
+  particles = Array.from({ length: particleCount() }, () => {
+    const t = Math.random();
+    return {
+      x:  Math.random() * W,
+      y:  Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.28,
+      vy: (Math.random() - 0.5) * 0.28,
+      r:  Math.random() * 1.8 + 0.5,
+      phase:        Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.012 + Math.random() * 0.03,
+      baseOpacity:  0.4  + Math.random() * 0.55,
+      cr: Math.round(255 - 255 * t),
+      cg: Math.round(255 - 43  * t),
+    };
+  });
 }
 
 let animRunning = true;
 let animFrameId = null;
+let gradientTime = 0;
+
+/* ── SHOOTING STAR SYSTEM ── */
+const METEOR_COUNT = 6;
+let meteors = [];
+
+function spawnMeteor(scatter) {
+  const angle = Math.random() * Math.PI * 2; // fully random direction
+  const speed = (W + H) * (0.000055 + Math.random() * 0.000035);
+  const len   = W  * (0.18 + Math.random() * 0.16);
+  const thick = H  * (0.004 + Math.random() * 0.003);
+
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  /* spawn from whichever edge the meteor is coming from */
+  let sx, sy;
+  if (Math.abs(cos) >= Math.abs(sin)) {
+    sx = cos > 0 ? -len : W + len;
+    sy = Math.random() * H;
+  } else {
+    sx = Math.random() * W;
+    sy = sin > 0 ? -len : H + len;
+  }
+
+  if (scatter) {
+    const d = Math.random() * (W + H);
+    sx += cos * d;
+    sy += sin * d;
+  }
+
+  return {
+    x: sx, y: sy,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    angle, len, thick,
+    hue:   185 + Math.random() * 90,
+    alpha: 0.28 + Math.random() * 0.18,
+  };
+}
+
+function initMeteors() {
+  meteors = Array.from({ length: METEOR_COUNT }, () => spawnMeteor(true));
+}
+
+function drawMeteor(m) {
+  ctx.save();
+  ctx.translate(m.x, m.y);
+  ctx.rotate(m.angle);
+
+  /* wedge: tail tip at (-len, 0), head at origin (0, 0)
+     gradient is almost entirely invisible until the last 20% — sharp spike at head */
+  const hw = m.thick * 0.5;
+  const g  = ctx.createLinearGradient(-m.len, 0, 0, 0);
+  g.addColorStop(0,    'rgba(0,0,0,0)');
+  g.addColorStop(0.70, 'rgba(0,0,0,0)');
+  g.addColorStop(0.88, `hsla(${m.hue},80%,65%,${m.alpha * 0.25})`);
+  g.addColorStop(0.96, `hsla(${m.hue},90%,75%,${m.alpha * 0.75})`);
+  g.addColorStop(1,    `hsla(${m.hue},95%,88%,${m.alpha})`);
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.moveTo(-m.len, 0);
+  ctx.lineTo(0,  hw);
+  ctx.lineTo(0, -hw);
+  ctx.closePath();
+  ctx.fill();
+
+  /* white core — only visible near the head */
+  const core = ctx.createLinearGradient(-m.len, 0, 0, 0);
+  core.addColorStop(0,    'rgba(255,255,255,0)');
+  core.addColorStop(0.82, 'rgba(255,255,255,0)');
+  core.addColorStop(0.94, `rgba(255,255,255,${m.alpha * 0.35})`);
+  core.addColorStop(1,    `rgba(255,255,255,${m.alpha * 0.65})`);
+  ctx.strokeStyle = core;
+  ctx.lineWidth   = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(-m.len, 0);
+  ctx.lineTo(0, 0);
+  ctx.stroke();
+
+  /* tight pin-point glow at the head */
+  const headR = m.thick * 1.6;
+  const glow  = ctx.createRadialGradient(0, 0, 0, 0, 0, headR);
+  glow.addColorStop(0,   `rgba(255,255,255,${m.alpha * 0.9})`);
+  glow.addColorStop(0.3, `hsla(${m.hue},95%,88%,${m.alpha * 0.5})`);
+  glow.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(0, 0, headR, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
 
 function drawFrame() {
   if (!animRunning) return;
   animFrameId = requestAnimationFrame(drawFrame);
   ctx.clearRect(0, 0, W, H);
 
-  const videoPlaying = heroVideo && heroVideo.readyState >= 3 && !heroVideo.paused;
+  /* ── DARK BASE ── */
+  gradientTime += 0.0018;
+  ctx.fillStyle = 'rgb(8,10,14)';
+  ctx.fillRect(0, 0, W, H);
 
-  if (!videoPlaying) {
-    /* solid base so canvas covers the full area as a background */
-    ctx.fillStyle = 'rgb(8,10,14)';
-    ctx.fillRect(0, 0, W, H);
-    if (videoEnded) {
-      /* subtle colour glows over the solid base */
-      const bg = ctx.createRadialGradient(W * 0.25, H * 0.45, 0, W * 0.4, H * 0.5, W * 0.75);
-      bg.addColorStop(0,   'rgba(0,90,130,0.5)');
-      bg.addColorStop(1,   'rgba(0,0,0,0)');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
-      const bg2 = ctx.createRadialGradient(W * 0.75, H * 0.3, 0, W * 0.7, H * 0.4, W * 0.5);
-      bg2.addColorStop(0,   'rgba(80,40,140,0.25)');
-      bg2.addColorStop(1,   'rgba(0,0,0,0)');
-      ctx.fillStyle = bg2;
-      ctx.fillRect(0, 0, W, H);
-    }
+  /* ── SHOOTING STARS ── */
+  for (let i = 0; i < meteors.length; i++) {
+    const m = meteors[i];
+    m.x += m.vx;
+    m.y += m.vy;
+    if (m.x > W + m.len || m.y > H + m.len || m.x < -m.len || m.y < -m.len) meteors[i] = spawnMeteor(false);
+    else drawMeteor(m);
   }
 
-  const dotOpacity  = videoEnded ? 0.85 : 0.55;
-  const lineOpacity = videoEnded ? 0.22 : 0.12;
-  const radiusScale = videoEnded ? 1.8  : 1.0;
-
+  /* ── SPARSE PARTICLES + FAINT LINES ── */
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
     p.x += p.vx;
@@ -240,44 +327,48 @@ function drawFrame() {
     if (p.x < 0 || p.x > W) p.vx *= -1;
     if (p.y < 0 || p.y > H) p.vy *= -1;
 
+    p.phase += p.twinkleSpeed;
+    const tw = 0.5 + 0.5 * Math.sin(p.phase);
+    const op = p.baseOpacity * tw * 0.9;
+    const r  = p.r * (0.75 + 0.35 * tw);
+
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r * radiusScale, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0,212,255,${dotOpacity})`;
+    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    /* lean cyan: mix white→cyan but keep it cold/techy */
+    ctx.fillStyle = `rgba(${p.cr},${p.cg},255,${op})`;
     ctx.fill();
 
     for (let j = i + 1; j < particles.length; j++) {
-      const q = particles[j];
-      const dx = p.x - q.x, dy = p.y - q.y;
+      const q    = particles[j];
+      const dx   = p.x - q.x, dy = p.y - q.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < CONNECT_DIST) {
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(q.x, q.y);
-        ctx.strokeStyle = `rgba(0,212,255,${lineOpacity * (1 - dist / CONNECT_DIST)})`;
-        ctx.lineWidth = videoEnded ? 0.9 : 0.6;
+        ctx.strokeStyle = `rgba(0,212,255,${0.13 * (1 - dist / CONNECT_DIST)})`;
+        ctx.lineWidth = 0.5;
         ctx.stroke();
       }
     }
   }
 }
 
-/* pause animation when hero is not visible — saves battery on mobile */
 const heroSection = document.getElementById('hero');
-const heroVisibilityObserver = new IntersectionObserver((entries) => {
-  const visible = entries[0].isIntersecting;
-  if (visible && !animRunning) {
-    animRunning = true;
-    drawFrame();
-  } else if (!visible && animRunning) {
+
+/* pause animation when tab is hidden */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
     animRunning = false;
     cancelAnimationFrame(animFrameId);
+  } else {
+    animRunning = true;
+    drawFrame();
   }
-}, { threshold: 0.01 });
-heroVisibilityObserver.observe(heroSection);
+});
 
-window.addEventListener('resize', () => { resize(); initParticles(); }, { passive: true });
-/* defer initial sizing to next paint so 100svh is fully computed */
-requestAnimationFrame(() => { resize(); initParticles(); drawFrame(); });
+window.addEventListener('resize', () => { resize(); initParticles(); initMeteors(); }, { passive: true });
+requestAnimationFrame(() => { resize(); initParticles(); initMeteors(); drawFrame(); });
 
 /* ── SMOOTH SCROLL (fallback for older Safari) ── */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
