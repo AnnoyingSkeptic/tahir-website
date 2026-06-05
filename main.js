@@ -179,7 +179,7 @@ const heroVideo = document.getElementById('heroVideo');
 
 let W, H, particles;
 const CONNECT_DIST = 160;
-const particleCount = () => window.innerWidth < 768 ? 35 : 80;
+const particleCount = () => window.innerWidth < 768 ? 40 : 110;
 
 function resize() {
   W = canvas.width = canvas.offsetWidth;
@@ -278,9 +278,8 @@ const heroVisibilityObserver = new IntersectionObserver((entries) => {
 heroVisibilityObserver.observe(heroSection);
 
 window.addEventListener('resize', () => { resize(); initParticles(); }, { passive: true });
-resize();
-initParticles();
-drawFrame();
+/* defer initial sizing to next paint so 100svh is fully computed */
+requestAnimationFrame(() => { resize(); initParticles(); drawFrame(); });
 
 /* ── SMOOTH SCROLL (fallback for older Safari) ── */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
