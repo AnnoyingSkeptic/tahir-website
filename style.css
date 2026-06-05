@@ -126,6 +126,7 @@ p { color: var(--text-muted); line-height: 1.75; }
   left: 0;
   right: 0;
   z-index: 100;
+  background: rgba(8,10,14,0.6);
   transition: background 0.4s ease, backdrop-filter 0.4s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 #navbar.nav-hidden {
@@ -213,8 +214,8 @@ p { color: var(--text-muted); line-height: 1.75; }
   min-height: 100vh;
   min-height: 100svh; /* iOS Safari: excludes browser chrome */
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: flex-start;
   overflow: hidden;
   transition: min-height 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -247,15 +248,18 @@ p { color: var(--text-muted); line-height: 1.75; }
 }
 #heroCanvas {
   position: absolute;
-  inset: 0;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+  left: 72%;
   z-index: 2;
 }
 .hero-content {
   position: relative;
   z-index: 3;
-  max-width: 520px;
-  padding: 8rem 3rem 3rem;
-  text-align: right;
+  max-width: 680px;
+  padding: 3rem 3rem 3rem;
+  text-align: left;
 }
 .hero-eyebrow {
   font-size: 0.75rem;
@@ -265,10 +269,10 @@ p { color: var(--text-muted); line-height: 1.75; }
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0.6rem;
 }
-.hero-eyebrow::after {
+.hero-eyebrow::before {
   content: '';
   display: inline-block;
   width: 32px;
@@ -292,6 +296,7 @@ p { color: var(--text-muted); line-height: 1.75; }
   -webkit-text-fill-color: transparent;
   background-clip: text;
   padding-bottom: 0.12em;
+  padding-right: 0.25em;
 }
 .hero-subtitle {
   font-family: var(--font-display);
@@ -315,7 +320,7 @@ p { color: var(--text-muted); line-height: 1.75; }
 
 .hero-ctas {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 1rem;
   flex-wrap: wrap;
 }
@@ -437,7 +442,7 @@ p { color: var(--text-muted); line-height: 1.75; }
 .stop-btn {
   position: absolute;
   bottom: 2.5rem;
-  left: 2.5rem;
+  right: 2.5rem;
   z-index: 4;
   width: 44px;
   height: 44px;
@@ -876,7 +881,7 @@ footer p {
   .hero-eyebrow {
     justify-content: center;
   }
-  .hero-eyebrow::after {
+  .hero-eyebrow::before {
     display: none; /* decorative line doesn't work centered */
   }
   .hero-ctas {
