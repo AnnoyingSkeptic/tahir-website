@@ -413,17 +413,27 @@ p { color: var(--text-muted); line-height: 1.75; }
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(0,212,255,0.6);
   background: rgba(8,10,14,0.55);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  color: var(--text);
+  color: var(--accent);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition);
   flex-shrink: 0;
+  animation: mutePulse 2s ease-in-out infinite;
+}
+@keyframes mutePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+}
+.mute-btn.unmuted {
+  border-color: rgba(255,255,255,0.25);
+  color: var(--text);
+  animation: none;
 }
 .mute-btn:hover {
   border-color: var(--accent);
