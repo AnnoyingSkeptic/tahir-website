@@ -255,6 +255,12 @@ p { color: var(--text-muted); line-height: 1.75; }
   height: 100%;
   z-index: 2;
   opacity: 0.7;
+  transition: left 1.2s ease, right 1.2s ease, opacity 1s ease;
+}
+#heroCanvas.expanded {
+  left: 0;
+  right: 0;
+  opacity: 0.92;
 }
 .hero-content {
   position: relative;

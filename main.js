@@ -15,6 +15,8 @@ function onVideoStop() {
   heroSection.classList.add('video-ended');
   stopBtn.classList.add('hidden');
   replayBtn.classList.add('visible');
+  canvas.classList.add('expanded');
+  setTimeout(() => { resize(); initParticles(); }, 1250);
 }
 
 function onVideoReplay() {
@@ -23,6 +25,7 @@ function onVideoReplay() {
   heroSection.classList.remove('video-ended');
   replayBtn.classList.remove('visible');
   stopBtn.classList.remove('hidden');
+  canvas.classList.remove('expanded');
   heroVid.currentTime = 0;
   heroVid.play();
 }
