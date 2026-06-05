@@ -182,8 +182,8 @@ const ctx = canvas.getContext('2d');
 const heroVideo = document.getElementById('heroVideo');
 
 let W, H, particles;
-const CONNECT_DIST = 180;
-const particleCount = () => window.innerWidth < 768 ? 60 : 180;
+const CONNECT_DIST = 160;
+const particleCount = () => window.innerWidth < 768 ? 40 : 110;
 
 function resize() {
   W = canvas.width = canvas.offsetWidth;
@@ -229,9 +229,9 @@ function drawFrame() {
     }
   }
 
-  const dotOpacity  = videoEnded ? 1.0  : 0.7;
-  const lineOpacity = videoEnded ? 0.35 : 0.18;
-  const radiusScale = videoEnded ? 2.0  : 1.0;
+  const dotOpacity  = videoEnded ? 0.85 : 0.55;
+  const lineOpacity = videoEnded ? 0.22 : 0.12;
+  const radiusScale = videoEnded ? 1.8  : 1.0;
 
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
