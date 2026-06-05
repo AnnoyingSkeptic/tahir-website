@@ -16,7 +16,7 @@ function onVideoStop() {
   stopBtn.classList.add('hidden');
   replayBtn.classList.add('visible');
   canvas.classList.add('expanded');
-  setTimeout(() => { resize(); initParticles(); }, 1250);
+  canvas.addEventListener('transitionend', () => { resize(); initParticles(); }, { once: true });
 }
 
 function onVideoReplay() {
@@ -210,26 +210,20 @@ function drawFrame() {
   const videoPlaying = heroVideo && heroVideo.readyState >= 3 && !heroVideo.paused;
 
   if (!videoPlaying) {
+    /* solid base so canvas covers the full area as a background */
+    ctx.fillStyle = 'rgb(8,10,14)';
+    ctx.fillRect(0, 0, W, H);
     if (videoEnded) {
-      /* richer background when video is done — two overlapping glows */
+      /* subtle colour glows over the solid base */
       const bg = ctx.createRadialGradient(W * 0.25, H * 0.45, 0, W * 0.4, H * 0.5, W * 0.75);
-      bg.addColorStop(0,   'rgba(0,90,130,0.95)');
-      bg.addColorStop(0.4, 'rgba(8,20,40,0.97)');
-      bg.addColorStop(1,   'rgba(8,10,14,1)');
+      bg.addColorStop(0,   'rgba(0,90,130,0.5)');
+      bg.addColorStop(1,   'rgba(0,0,0,0)');
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, W, H);
-
       const bg2 = ctx.createRadialGradient(W * 0.75, H * 0.3, 0, W * 0.7, H * 0.4, W * 0.5);
       bg2.addColorStop(0,   'rgba(80,40,140,0.25)');
-      bg2.addColorStop(1,   'rgba(8,10,14,0)');
+      bg2.addColorStop(1,   'rgba(0,0,0,0)');
       ctx.fillStyle = bg2;
-      ctx.fillRect(0, 0, W, H);
-    } else {
-      const bg = ctx.createRadialGradient(W * 0.3, H * 0.4, 0, W * 0.5, H * 0.5, W * 0.85);
-      bg.addColorStop(0, 'rgba(0,40,60,0.9)');
-      bg.addColorStop(0.5, 'rgba(5,10,18,0.95)');
-      bg.addColorStop(1, 'rgba(8,10,14,1)');
-      ctx.fillStyle = bg;
       ctx.fillRect(0, 0, W, H);
     }
   }
