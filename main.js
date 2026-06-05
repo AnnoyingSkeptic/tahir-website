@@ -16,7 +16,7 @@ function onVideoStop() {
   stopBtn.classList.add('hidden');
   replayBtn.classList.add('visible');
   canvas.classList.add('expanded');
-  resize(); initParticles(1.0);
+  resize(); initParticles();
 }
 
 function onVideoReplay() {
@@ -26,7 +26,7 @@ function onVideoReplay() {
   replayBtn.classList.remove('visible');
   stopBtn.classList.remove('hidden');
   canvas.classList.remove('expanded');
-  resize(); initParticles(0.65);
+  resize(); initParticles();
   heroVid.currentTime = 0;
   heroVid.play();
 }
@@ -190,9 +190,9 @@ function resize() {
   H = canvas.height = canvas.offsetHeight;
 }
 
-function initParticles(widthFraction = 0.65) {
+function initParticles() {
   particles = Array.from({ length: particleCount() }, () => ({
-    x: Math.random() * W * widthFraction,
+    x: Math.random() * W,
     y: Math.random() * H,
     vx: (Math.random() - 0.5) * 0.4,
     vy: (Math.random() - 0.5) * 0.4,
