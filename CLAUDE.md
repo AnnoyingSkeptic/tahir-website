@@ -12,6 +12,8 @@ Live at **tahiralaybeyi.com** — deployed via **GitHub Pages** (`AnnoyingSkepti
 
 DNS is managed through **Netlify DNS** (nameservers: `dns*.p03.nsone.net`). A records point to GitHub Pages IPs. A `CNAME` file in the repo root sets the custom domain — do not delete it.
 
+- After enabling Pages via API or setting a custom domain, GitHub auto-commits a `CNAME` file. Run `git pull --rebase` before the next push or it will be rejected.
+
 ## Running the site
 
 Open `index.html` directly in a browser. No server required.
