@@ -28,7 +28,7 @@ python3 -m http.server 8080
 
 Three files, no frameworks:
 
-- **`index.html`** — All markup. Sections in order: `#navbar`, `#hero`, `#about`, `#skills`, `#portfolio`, `#social`, `#contact`, `footer`. Canvas element is at the top of `<body>` (before navbar), not inside `#hero`.
+- **`index.html`** — All markup. Sections in order: `#navbar`, `#hero`, `#about`, `#skills`, `#portfolio`, `#contact`, `footer`. Canvas element is at the top of `<body>` (before navbar), not inside `#hero`. The `#social` section was removed — social links now live inside `#contact` as `.contact-social` icon circles below the email CTA, with a `.contact-find-label` text divider.
 - **`style.css`** — CSS custom properties in `:root` (colors, fonts, radius, transition). Layout uses CSS Grid + Flexbox. Breakpoints: `900px` (skills grid), `768px` (main responsive), `480px` (mobile hero centering).
 - **`main.js`** — Features: navbar scroll-shadow, typing animation, scroll-reveal via `IntersectionObserver`, canvas particle mesh + shooting star system.
 
