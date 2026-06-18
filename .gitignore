@@ -22,3 +22,7 @@ assets/*.ogg
 docs/
 *.swp
 *.swo
+
+# Dev-only preview tooling (keeps site dependency-free)
+tools/node_modules/
+tools/package-lock.json

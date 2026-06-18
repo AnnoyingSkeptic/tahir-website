@@ -25,6 +25,21 @@ python3 -m http.server 8080
 
 This also matches how GitHub Pages serves the site, so previews stay accurate. iframe embeds (YouTube/SoundCloud) also require HTTP, not `file://`.
 
+### Visual smoke test (Playwright screenshots)
+
+`tools/preview.mjs` drives bundled Chromium to screenshot the site at desktop (1440) and mobile (390), scrolling each section so reveals fire. Dev-only — `tools/` is gitignored so the site stays dependency-free.
+
+```bash
+cd tools && npm install        # one-time; Chromium is already cached system-wide
+node preview.mjs               # live site → /tmp/{desktop,mobile}-{hero,about,skills,portfolio,contact}.png
+node preview.mjs http://localhost:8080   # local dev server
+```
+
+Gotchas (learned the hard way — don't re-derive):
+- Use `waitUntil: 'load'`, **not `'networkidle'`** — the autoplay hero video keeps the network busy forever, so `networkidle` always times out.
+- Scroll-reveal sections (`.reveal` → `.visible` via `IntersectionObserver`) render blank in a plain `fullPage` screenshot because the observer never fires off-screen. `preview.mjs` scrolls through the page first to trigger them; a raw `fullPage` shot will look like the page is empty below the hero (it isn't).
+- The Playwright **MCP** is pinned to the `chrome` channel (not installed). The script bypasses the MCP and uses the cached bundled Chromium directly, so it works without Chrome or a Claude Code restart.
+
 ## Architecture
 
 Three files, no frameworks:
