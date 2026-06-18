@@ -16,13 +16,14 @@ DNS is managed through **Netlify DNS** (nameservers: `dns*.p03.nsone.net`). A re
 
 ## Running the site
 
-Open `index.html` directly in a browser. No server required.
+**Always preview via a local server, not `file://`.** Opening `index.html` directly works for a glance, but `file://` aggressively caches `main.js`/`style.css`, so visual changes (canvas particles, meteors, CSS tweaks) can look *reverted when they actually shipped*. This burned a whole session once. Serve it and hard-refresh instead:
 
-Optional local dev server (for iframe embeds that require HTTP):
 ```bash
 python3 -m http.server 8080
-# visit http://localhost:8080
+# visit http://localhost:8080 — Cmd+Shift+R to bypass cache
 ```
+
+This also matches how GitHub Pages serves the site, so previews stay accurate. iframe embeds (YouTube/SoundCloud) also require HTTP, not `file://`.
 
 ## Architecture
 
@@ -46,6 +47,14 @@ Three files, no frameworks:
 - Nav: no logo, `justify-content: flex-end` on `.nav-inner`.
 - Brush stroke accents: `::before` pseudo-elements on `#about`, `#skills`, `#portfolio`, `#contact` — narrow radial-gradient ellipses (cyan/purple, 8–13% opacity). `.container` has `position: relative; z-index: 1` to stay above them.
 - `docs/` folder is gitignored (superpowers plugin scaffold).
+
+## Visual / animation changes — workflow
+
+Canvas + animation tweaks caused the most rework (particle mesh, meteors). Before editing:
+
+- Restate the target as **explicit per-state behavior** ("video playing = X; video stopped = Y") and confirm it before touching `main.js`.
+- Change **one state/variable at a time**, serve locally, and let Tahir verify each step before stacking the next change — don't batch several animation edits into one revert-prone pass.
+- Don't infer intent from a vague adjective ("subtle", "cooler"); ask for the concrete value (opacity, count, speed) or propose one and confirm.
 
 ## Canvas system
 
