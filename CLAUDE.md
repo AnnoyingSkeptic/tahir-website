@@ -48,9 +48,19 @@ DNS is managed through **Netlify DNS** (nameservers: `dns*.p03.nsone.net`). A re
 **Always preview via a local server, not `file://`.** Opening `index.html` directly works for a glance, but `file://` aggressively caches `main.js`/`style.css`, so visual changes (canvas particles, meteors, CSS tweaks) can look *reverted when they actually shipped*. This burned a whole session once. Serve it and hard-refresh instead:
 
 ```bash
-python3 -m http.server 8080
-# visit http://localhost:8080 — Cmd+Shift+R to bypass cache
+python3 -m http.server 8081 --bind 127.0.0.1
+# visit http://127.0.0.1:8081 — Cmd+Shift+R to bypass cache
 ```
+
+**Do not use port 8080 on this machine.** SpoofDPI (the LaunchAgent that works around Turkey's ISP blocking) listens on `127.0.0.1:8080`. Since `localhost` resolves to `127.0.0.1`, SpoofDPI wins the race and you get a 200 back from the *proxy*, not from your site — which looks exactly like a stale cache or a broken build. A `python3 -m http.server 8080` alongside it binds `*:8080` (IPv6 wildcard) and appears to start fine, so nothing errors; you just silently preview the wrong thing.
+
+Bind explicitly to `127.0.0.1` and pick a port other than 8080. Sanity-check what you're actually served before debugging anything visual:
+
+```bash
+curl -s --noproxy '*' http://127.0.0.1:8081/ | grep -c 'embed-facade'   # expect 5
+```
+
+Also: always `--bind 127.0.0.1`. A bare `python3 -m http.server` binds all interfaces, and if it's started from the wrong directory it will happily serve `$HOME` to the local network.
 
 This also matches how GitHub Pages serves the site, so previews stay accurate. iframe embeds (YouTube/SoundCloud) also require HTTP, not `file://`.
 
