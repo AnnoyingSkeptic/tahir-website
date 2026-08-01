@@ -4,7 +4,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Single-page audio professional portfolio for Tahir Alaybeyi. Pure HTML/CSS/JS — no build step, no dependencies, no package manager.
+Bilingual (EN/TR) audio professional portfolio for Tahir Alaybeyi, plus a blog and legal pages. The **shipped site** is pure HTML/CSS/JS — no framework, no runtime dependencies, no package manager. Blog and legal pages are generated from markdown by a hand-run script; the generated `.html` is committed and served as-is.
+
+## Language structure
+
+| | English | Turkish |
+|---|---|---|
+| Homepage | `index.html` | `tr/index.html` |
+| Blog | `blog/` | `tr/blog/` |
+| Privacy | `privacy.html` | `tr/gizlilik.html` |
+| Cookies | `cookies.html` | `tr/cerezler.html` |
+
+- The two homepages are **hand-maintained twins**. Edit both together. `tools/build.mjs` runs a structural drift check (section ids, facade/card/skill counts) and warns when they diverge — heed it.
+- Every page carries `hreflang` alternates for `en`, `tr`, and `x-default` (English).
+- The typing animation reads its roles from `data-roles` on `#typedRole` (pipe-separated), so `main.js` is shared by both homepages. Don't hardcode roles back into the JS.
+- Subpages load `page.js`, **not** `main.js` — `main.js` assumes the hero video and canvas exist and throws without them.
+
+## Content pipeline
+
+Markdown in `content/` → static HTML at the repo root:
+
+```bash
+node tools/build.mjs      # writes blog/, tr/blog/, legal pages, sitemap.xml
+```
+
+- `content/posts/{en,tr}/*.md` → `blog/<slug>.html`, `tr/blog/<slug>.html`
+- `content/legal/{en,tr}/*.md` → `<slug>.html`, `tr/<slug>.html`
+- **Translation pairing is by FILENAME**, not slug. `legal/en/privacy.md` and `legal/tr/privacy.md` are the same page; the `slug:` front-matter field sets the URL, so the Turkish one publishes to `/tr/gizlilik.html`. A file with no counterpart builds anyway and logs a warning.
+- Front matter: `title`, `slug`, `date` (ISO), `description`.
+- Run the script and **commit the generated HTML** — GitHub Pages does no building.
+- `marked` lives in `tools/` (gitignored), so the site itself stays dependency-free.
 
 ## Status
 
@@ -51,17 +80,48 @@ Three files, no frameworks:
 ## Key conventions
 
 - Accent color: `--accent: #00d4ff`. All interactive hover states glow in this color.
-- Display font: **Montserrat** (`--font-display`). Body: **Inter** (`--font-body`). Both from Google Fonts.
+- Display font: **Montserrat** (`--font-display`). Body: **Inter** (`--font-body`). Both **self-hosted** in `assets/fonts/` — never reintroduce a `fonts.googleapis.com` link (see Privacy below).
 - Hero is **right-aligned on desktop** (`justify-content: flex-start`, `text-align: left`). On mobile (`<480px`) it switches to `justify-content: center`, `text-align: center`.
 - Skill cards use per-card accent colors via `nth-child` + `--skill-glow`. Portfolio cards alternate cyan/purple.
 - `background-clip: text` on gradient spans: always add `padding-bottom: 0.12em` — tight `line-height` clips descenders.
 - Scroll-reveal: add class `reveal` to any element; JS adds `visible` on viewport entry.
-- Embedded media: YouTube uses 16:9 padding-bottom iframe wrapper (`.project-embed`); SoundCloud uses `.project-embed.sc-embed` (fixed 166px height).
+- Embedded media: **click-to-load facades, never bare iframes.** `.embed-facade` holds a locally-hosted poster (`assets/thumbs/<id>.jpg`) or a CSS waveform, a play button, and a consent note. `main.js` swaps in the real iframe on click. YouTube uses 16:9 padding-bottom wrapper (`.project-embed`); SoundCloud uses `.project-embed.sc-embed` (fixed 166px height).
 - Hero height: `min-height: 100vh; min-height: 100svh` — `100svh` overrides on iOS Safari to exclude browser chrome.
 - Skill icons: inline Feather SVGs (`stroke="currentColor"`), colored via `.skill-icon { color: <card-accent>; }` per nth-child.
 - Nav: no logo, `justify-content: flex-end` on `.nav-inner`.
 - Brush stroke accents: `::before` pseudo-elements on `#about`, `#skills`, `#portfolio`, `#contact` — narrow radial-gradient ellipses (cyan/purple, 8–13% opacity). `.container` has `position: relative; z-index: 1` to stay above them.
 - `docs/` folder is gitignored (superpowers plugin scaffold).
+
+## Privacy — the site's central technical constraint
+
+**A cold page load must contact zero third parties and set zero cookies.** The published Cookie Policy states this outright, so breaking it makes the site's own legal text false. This is why there is no cookie banner: there is nothing to consent to.
+
+Rules that follow from it — do not quietly undo any of these:
+
+- **No third-party asset URLs.** No CDN fonts, scripts, stylesheets, or hotlinked images. Everything ships from the repo. Google Fonts hotlinking specifically leaks visitor IPs to Google (LG München I, 3 O 17493/20).
+- **No embed loads before a click.** New video/audio goes in as a facade with a locally-downloaded poster. YouTube uses `youtube-nocookie.com`, injected on click only.
+- **No analytics, no tag managers, no pixels, no web fonts by URL.**
+- **No contact form.** The `mailto:` link means the site never receives or stores form data.
+- **No comments on the blog.** User-generated content would make the site a *yer sağlayıcı* under Turkish Law 5651 and pull in a whole separate obligation set.
+- **No newsletter signup** without a deliberate decision first — commercial email in Turkey requires İYS registration plus separate explicit consent.
+
+Verify before every deploy:
+
+```bash
+python3 -m http.server 8080          # repo root
+node tools/privacy-check.mjs         # from repo root; exits non-zero on violation
+```
+
+It asserts zero foreign requests, zero cookies, and zero console errors on all ten pages, then confirms the facades still swap in real players on click and that Turkish glyphs render (latin-ext subset loaded).
+
+### Legal documents
+
+`content/legal/` is the source of truth; the `.html` files are generated. If you edit them:
+
+- **Keep the privacy notice and any consent text as separate documents.** Turkish DPA principle decision 2026/347 (18.02.2026, Official Gazette 24.03.2026) makes merging them unlawful. Currently there is no consent document at all, which is deliberate.
+- The privacy notice must retain KVKK Art. 10's mandatory elements and the Art. 11 rights list.
+- Cross-border transfer wording reflects KVKK Art. 9 as amended effective 01.06.2024 (transfers are incidental, on the visitor's own initiative).
+- Not reviewed by a lawyer. Treat as a good-faith baseline, not settled advice.
 
 ## Visual / animation changes — workflow
 
@@ -98,6 +158,9 @@ No exceptions:
 
 ## Open items
 
+- **Legal texts unreviewed by a lawyer** — written 2026-08-01 against KVKK Art. 10/11, the Çerez Rehberi, and decision 2026/347. Whether a solo freelancer portfolio is a full *veri sorumlusu* is genuinely arguable; the technical measures stand regardless.
+- **No physical address in the privacy notice** — deliberately omitted (home address on a public page). Conventionally expected in a Turkish aydınlatma metni; email-only is the trade-off taken.
+- **Blog has one post.** The system works; the content pipeline is the bottleneck, not the tooling.
 - Video logo removal — Calvin Klein logo in hero video. DaVinci Resolve downloaded (2026-06-04). Motion-tracked mask/rotoscope approach.
 - Avatar photo — replace with cleaner shot (simpler background, just Tahir + guitar). Drop on Desktop and swap `assets/avatar.jpg`.
 - Exaltation portfolio card — description is placeholder copy. Need one line on sound/mood.

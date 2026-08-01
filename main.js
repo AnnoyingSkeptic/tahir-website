@@ -114,17 +114,18 @@ document.querySelectorAll('.mobile-link').forEach(link => {
   });
 });
 
-/* ── TYPING ANIMATION ── */
-const roles = [
-  'Guitarist',
-  'Session Musician',
-  'Sound Engineer',
-  'Mix & Master',
-  'Game Audio',
-  'Sound Design',
-];
-
+/* ── TYPING ANIMATION ──
+   Roles come from data-roles on #typedRole so the Turkish homepage can supply
+   its own list without forking this file. */
 const typedEl = document.getElementById('typedRole');
+
+const roles = (typedEl.dataset.roles || '')
+  .split('|').map(s => s.trim()).filter(Boolean);
+
+if (!roles.length) {
+  roles.push('Guitarist', 'Session Musician', 'Sound Engineer',
+             'Mix & Master', 'Game Audio', 'Sound Design');
+}
 let roleIndex = 0;
 let charIndex = 0;
 let deleting = false;
@@ -369,6 +370,43 @@ document.addEventListener('visibilitychange', () => {
 
 window.addEventListener('resize', () => { resize(); initParticles(); initMeteors(); }, { passive: true });
 requestAnimationFrame(() => { resize(); initParticles(); initMeteors(); drawFrame(); });
+
+/* ── EMBED FACADES ──
+   The portfolio ships poster images, not iframes. YouTube / SoundCloud are only
+   contacted once the visitor presses play, so a cold page load makes zero
+   third-party requests and sets zero cookies. Swaps in the real player on click. */
+document.querySelectorAll('.embed-facade').forEach(facade => {
+  function activate(e) {
+    /* let the "cookies" link in the notice behave like a link */
+    if (e.target.closest('a')) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.title = facade.dataset.title || '';
+    iframe.setAttribute('frameborder', '0');
+
+    if (facade.dataset.embed === 'youtube') {
+      /* youtube-nocookie.com — no cookies until playback actually starts */
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' +
+                   encodeURIComponent(facade.dataset.id) + '?autoplay=1&rel=0';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+    } else {
+      iframe.src = 'https://w.soundcloud.com/player/?url=' +
+                   encodeURIComponent(facade.dataset.url) +
+                   '&color=%2300d4ff&auto_play=true&hide_related=true' +
+                   '&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
+      iframe.allow = 'autoplay';
+      iframe.setAttribute('scrolling', 'no');
+    }
+
+    facade.replaceWith(iframe);
+  }
+
+  facade.addEventListener('click', activate);
+  facade.querySelector('.facade-play').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(e); }
+  });
+});
 
 /* ── SMOOTH SCROLL (fallback for older Safari) ── */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

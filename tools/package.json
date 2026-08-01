@@ -5,5 +5,8 @@
   "description": "Dev-only visual preview/smoke-test tooling. NOT part of the site — the site stays dependency-free.",
   "dependencies": {
     "playwright": "^1.0.0"
+  },
+  "devDependencies": {
+    "marked": "^18.0.7"
   }
 }
