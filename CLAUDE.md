@@ -151,12 +151,12 @@ Tuned per page via data attributes on the canvas element:
 
 | Attribute | Default | Homepages | Subpages |
 |---|---|---|---|
-| `data-density` | `1` | omitted | `0.45` |
-| `data-meteors` | `6` | omitted | `3` |
-| `data-alpha` | `1` | omitted | `0.7` |
+| `data-density` | `1` | omitted | `0.7` |
+| `data-meteors` | `6` | omitted | `4` |
+| `data-alpha` | `1` | omitted | `0.8` |
 | `data-mesh` | fixed 180px | omitted | `responsive` |
 
-The homepages omit all four **on purpose** — they run at the original values, so their appearance is unchanged from before the extraction. Subpages run the same system thinned out so long-form text stays readable.
+The homepages omit all four **on purpose** — they run at the original values, so their appearance is unchanged from before the extraction. Subpages run the same system thinned out so long-form text stays readable. Subpage values are Tahir's call (raised from 0.45/3/0.7 on 2026-08-01); treat them as a preference, not a tuning target.
 
 `data-mesh="responsive"` caps the connection radius at 30% of viewport width. Without it the 180px radius spans half a 375px phone screen and the mesh reads as clutter — fine on desktop, bad on mobile. Only subpages set it; adding it to the homepages would change their mobile look.
 
