@@ -169,6 +169,10 @@ ${alternates}
 </head>
 <body class="subpage">
 
+  <!-- Same particle/meteor system as the homepage, thinned out and dimmed so
+       long-form text stays readable on top of it. See canvas.js. -->
+  <canvas id="heroCanvas" data-density="0.45" data-meteors="3" data-alpha="0.7" data-mesh="responsive"></canvas>
+
   <nav id="navbar">
     <div class="nav-inner">
       <ul class="nav-links">
@@ -215,6 +219,7 @@ ${o.content}
     </div>
   </footer>
 
+  <script src="${up}canvas.js"></script>
   <script src="${up}page.js"></script>
 </body>
 </html>

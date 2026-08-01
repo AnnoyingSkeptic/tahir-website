@@ -85,7 +85,9 @@ Three files, no frameworks:
 
 - **`index.html`** — All markup. Sections in order: `#navbar`, `#hero`, `#about`, `#skills`, `#portfolio`, `#contact`, `footer`. Canvas element is at the top of `<body>` (before navbar), not inside `#hero`. The `#social` section was removed — social links now live inside `#contact` as `.contact-social` icon circles below the email CTA, with a `.contact-find-label` text divider.
 - **`style.css`** — CSS custom properties in `:root` (colors, fonts, radius, transition). Layout uses CSS Grid + Flexbox. Breakpoints: `900px` (skills grid), `768px` (main responsive), `480px` (mobile hero centering).
-- **`main.js`** — Features: navbar scroll-shadow, typing animation, scroll-reveal via `IntersectionObserver`, canvas particle mesh + shooting star system.
+- **`main.js`** — Homepage only: hero video controls, typing animation, navbar scroll, scroll-reveal, embed facades.
+- **`canvas.js`** — Particle mesh + shooting stars. Loaded by *every* page, before `main.js` / `page.js`. Self-guards on a missing canvas element.
+- **`page.js`** — Subpages only: navbar scroll, mobile menu, scroll-reveal. No hero/video assumptions.
 
 ## Key conventions
 
@@ -142,6 +144,21 @@ Canvas + animation tweaks caused the most rework (particle mesh, meteors). Befor
 - Don't infer intent from a vague adjective ("subtle", "cooler"); ask for the concrete value (opacity, count, speed) or propose one and confirm.
 
 ## Canvas system
+
+Lives in **`canvas.js`**, shared by every page (homepages and subpages). It is *not* in `main.js` — don't move it back, or the two page types will diverge.
+
+Tuned per page via data attributes on the canvas element:
+
+| Attribute | Default | Homepages | Subpages |
+|---|---|---|---|
+| `data-density` | `1` | omitted | `0.45` |
+| `data-meteors` | `6` | omitted | `3` |
+| `data-alpha` | `1` | omitted | `0.7` |
+| `data-mesh` | fixed 180px | omitted | `responsive` |
+
+The homepages omit all four **on purpose** — they run at the original values, so their appearance is unchanged from before the extraction. Subpages run the same system thinned out so long-form text stays readable.
+
+`data-mesh="responsive"` caps the connection radius at 30% of viewport width. Without it the 180px radius spans half a 375px phone screen and the mesh reads as clutter — fine on desktop, bad on mobile. Only subpages set it; adding it to the homepages would change their mobile look.
 
 - `<canvas id="heroCanvas">` sits at `<body>` level, `position: fixed`, `z-index: 0`. All sections are `background: transparent; z-index: 1` so the canvas shows through the full page.
 - Two systems: **particle mesh** (200 twinkling dots with connecting lines, white→cyan color range) + **shooting stars** (6 meteors, random 360° directions, slow drift).
