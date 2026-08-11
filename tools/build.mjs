@@ -35,6 +35,11 @@ const T = {
     other:    'TR',
     otherFull:'Türkçe',
     blogTitle:'Blog',
+    /* blogMetaTitle is the <title>; blogTitle stays the on-page label.
+       "Blog" is the same word in Turkish, so without a per-language descriptor
+       /blog/ and /tr/blog/ render an identical title tag — a duplicate-title
+       flag in Search Console and a wasted SERP line. */
+    blogMetaTitle: 'Blog — Guitar & Production Notes',
     blogLead: 'Notes on guitar, production, and audio work.',
     backToBlog:'← All posts',
     backHome: '← Home',
@@ -50,6 +55,7 @@ const T = {
     other:    'EN',
     otherFull:'English',
     blogTitle:'Blog',
+    blogMetaTitle: 'Blog — Gitar ve Prodüksiyon Notları',
     blogLead: 'Gitar, prodüksiyon ve ses işleri üzerine notlar.',
     backToBlog:'← Tüm yazılar',
     backHome: '← Anasayfa',
@@ -326,7 +332,7 @@ for (const kind of ['posts', 'legal']) {
 
       written.push(write(join(ROOT, outPath), layout({
         lang, outPath, altPath,
-        title: t.blogTitle,
+        title: t.blogMetaTitle,
         description: t.blogLead,
         type: 'page',
         content: `      <header class="page-head">\n` +
