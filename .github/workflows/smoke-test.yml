@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  pages: read
 
 jobs:
   smoke:
@@ -52,8 +53,12 @@ jobs:
           asset 'main.js'
           exit $fail
 
-      - name: Assert custom domain is intact (CNAME)
+      - name: Assert custom domain is intact (Pages settings)
+        # GitHub Pages consumes the CNAME file and does not serve it publicly,
+        # so ask the Pages API which domain is configured instead.
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          cname=$(curl -fsSL "$SITE/CNAME" | tr -d '[:space:]')
-          echo "CNAME serves: '$cname'"
-          [ "$cname" = "tahiralaybeyi.com" ] || { echo "::error::CNAME drifted to '$cname'"; exit 1; }
+          cname=$(gh api "repos/${{ github.repository }}/pages" --jq .cname)
+          echo "Pages custom domain: '$cname'"
+          [ "$cname" = "tahiralaybeyi.com" ] || { echo "::error::custom domain drifted to '$cname'"; exit 1; }
