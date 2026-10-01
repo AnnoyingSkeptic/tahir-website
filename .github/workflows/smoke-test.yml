@@ -1,0 +1,59 @@
+name: Post-deploy smoke test
+
+# Runs automatically after every GitHub Pages deployment (deployment_status =
+# success), and on demand. Asserts the LIVE site actually serves the new build —
+# so "deployed" provably means "working", not just "pushed".
+
+on:
+  deployment_status:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    # Only run once Pages reports a successful deploy (or when triggered manually)
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.deployment_status.state == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      SITE: https://tahiralaybeyi.com
+    steps:
+      - name: Wait for live site to return 200 (CDN propagation)
+        run: |
+          for i in $(seq 1 12); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$SITE" || true)
+            echo "attempt $i: HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 10
+          done
+          echo "::error::Site never returned 200 after ~2min"; exit 1
+
+      - name: Assert key HTML markers are present
+        run: |
+          html=$(curl -fsSL "$SITE")
+          fail=0
+          check() { echo "$html" | grep -qi "$1" && echo "ok: $2" || { echo "::error::MISSING: $2 ($1)"; fail=1; }; }
+          check '<title>Tahir Alaybeyi'            'page title'
+          check 'id="heroVideo"'                   'hero video element'
+          check 'id="heroCanvas"'                  'particle/meteor canvas'
+          check 'id="about"'                       'about section'
+          check 'id="skills"'                      'skills section'
+          check 'id="portfolio"'                   'portfolio section'
+          check 'id="contact"'                     'contact section'
+          exit $fail
+
+      - name: Assert critical assets load (200, not 404)
+        run: |
+          fail=0
+          asset() { code=$(curl -s -o /dev/null -w '%{http_code}' "$SITE/$1"); [ "$code" = "200" ] && echo "ok: $1 ($code)" || { echo "::error::asset $1 returned $code"; fail=1; }; }
+          asset 'assets/hero-video.mp4'
+          asset 'style.css'
+          asset 'main.js'
+          exit $fail
+
+      - name: Assert custom domain is intact (CNAME)
+        run: |
+          cname=$(curl -fsSL "$SITE/CNAME" | tr -d '[:space:]')
+          echo "CNAME serves: '$cname'"
+          [ "$cname" = "tahiralaybeyi.com" ] || { echo "::error::CNAME drifted to '$cname'"; exit 1; }

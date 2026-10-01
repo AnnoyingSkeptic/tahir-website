@@ -71,7 +71,7 @@ This also matches how GitHub Pages serves the site, so previews stay accurate. i
 ```bash
 cd tools && npm install        # one-time; Chromium is already cached system-wide
 node preview.mjs               # live site → /tmp/{desktop,mobile}-{hero,about,skills,portfolio,contact}.png
-node preview.mjs http://localhost:8080   # local dev server
+node preview.mjs http://127.0.0.1:8081   # local dev server (not 8080 — see above)
 ```
 
 Gotchas (learned the hard way — don't re-derive):
@@ -120,9 +120,11 @@ Rules that follow from it — do not quietly undo any of these:
 Verify before every deploy:
 
 ```bash
-python3 -m http.server 8080          # repo root
-node tools/privacy-check.mjs         # from repo root; exits non-zero on violation
+python3 -m http.server 8081 --bind 127.0.0.1        # repo root (not 8080 — SpoofDPI owns it)
+node tools/privacy-check.mjs http://127.0.0.1:8081  # exits non-zero on violation
 ```
+
+⚠️ **Pass the base URL explicitly.** `privacy-check.mjs` and `preview.mjs` both still *default* to `http://localhost:8080` (`process.argv[2] || …`) — i.e. straight into SpoofDPI. Run bare, they audit the proxy's response, not the site, and can report a clean pass for a page they never loaded. Fix the defaults in both scripts when next touching `tools/`.
 
 It asserts zero foreign requests, zero cookies, and zero console errors on all ten pages, then confirms the facades still swap in real players on click and that Turkish glyphs render (latin-ext subset loaded).
 
