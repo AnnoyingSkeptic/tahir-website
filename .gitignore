@@ -26,3 +26,6 @@ docs/
 # Dev-only preview tooling (keeps site dependency-free)
 tools/node_modules/
 tools/package-lock.json
+
+# Local working notes for Claude Code: personal environment detail, keep out of the public repo
+CLAUDE.md
