@@ -9,7 +9,7 @@
 
 import { chromium } from 'playwright';
 
-const base = (process.argv[2] || 'http://localhost:8080').replace(/\/$/, '');
+const base = (process.argv[2] || 'http://127.0.0.1:8081').replace(/\/$/, '');
 const origin = new URL(base).host;
 
 const PAGES = [
@@ -69,7 +69,7 @@ for (const [path, label] of [['/', 'EN'], ['/tr/', 'TR']]) {
   await page.goto(base + path, { waitUntil: 'load' });
 
   const facades = await page.locator('.embed-facade').count();
-  record(`${label} homepage — 5 facades present`, facades === 5, `found ${facades}`);
+  record(`${label} homepage — 8 facades present`, facades === 8, `found ${facades}`);
 
   // YouTube facade
   await page.locator('.embed-facade[data-embed="youtube"]').first().click();
@@ -79,9 +79,9 @@ for (const [path, label] of [['/', 'EN'], ['/tr/', 'TR']]) {
          !!ytSrc && ytSrc.includes('youtube-nocookie.com/embed/'), ytSrc || 'no iframe');
 
   // SoundCloud facade
-  await page.locator('.embed-facade[data-embed="soundcloud"]').click();
+  await page.locator('.embed-facade[data-embed="soundcloud"]').first().click();
   await page.waitForTimeout(600);
-  const scSrc = await page.locator('.sc-embed iframe').getAttribute('src').catch(() => null);
+  const scSrc = await page.locator('.sc-embed iframe').first().getAttribute('src').catch(() => null);
   record(`${label} homepage — play swaps in SoundCloud player`,
          !!scSrc && scSrc.includes('w.soundcloud.com/player'), scSrc || 'no iframe');
 

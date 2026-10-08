@@ -2,7 +2,7 @@
 // Usage:
 //   cd tools && npm install        # one-time (playwright is cached system-wide)
 //   node preview.mjs               # shoots live site
-//   node preview.mjs http://localhost:8080   # shoots a local dev server
+//   node preview.mjs http://127.0.0.1:8081   # shoots a local dev server
 //
 // Why this exists: file:// caching hides shipped changes, and scroll-reveal
 // sections only render when scrolled into view, so a plain fullPage shot shows
